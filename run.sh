@@ -229,13 +229,13 @@ install_all () {
 
 	if [ "$1" = silent_installation_keyword ]; then
 		# A
-		install_arronax silent;
+		install_arronax $silent_installation_keyword;
 
 		# S
-		install_sublime silent;
+		install_sublime $silent_installation_keyword;
 
 		# V
-		install_vim silent;
+		install_vim $silent_installation_keyword;
 	else
 		# A
 		install_arronax;
@@ -295,27 +295,27 @@ IMEOF
 		read install_option
 		case "$install_option" in
 			# All programs
-			"a"|"A")        install_all silent                          ;;
-			"av"|"Av")      install_all                                 ;;
+			"a"|"A")		install_all $silent_installation_keyword		;;
+			"av"|"Av")		install_all										;;
 
 			# A___
-			"a1"|"A1")      install_arronax silent                      ;;
-			"a1v"|"A1v")    install_arronax                             ;;
+			"a1"|"A1")		install_arronax $silent_installation_keyword	;;
+			"a1v"|"A1v")	install_arronax									;;
 
 			
 			# S___
-			"s1"|"S1")      install_sublime silent                      ;;
-			"s1v"|"S1v")    install_sublime                             ;;
+			"s1"|"S1")		install_sublime $silent_installation_keyword	;;
+			"s1v"|"S1v")	install_sublime									;;
 			
 
 			# V___
-			"v1"|"V1")      install_vim silent                          ;;
-			"v1v"|"V1v")    install_vim                                 ;;
+			"v1"|"V1")		install_vim $silent_installation_keyword		;;
+			"v1v"|"V1v")	install_vim										;;
 
 			# Others
-			"B")            return                                      ;;
-			"b")            return                                      ;; 
-			* )             error_flag=1;                               ;;
+			"B")			return											;;
+			"b")			return											;; 
+			* )				error_flag=1;									;;
 		esac
 		final_feedback;
 		read finished;
