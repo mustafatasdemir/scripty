@@ -126,7 +126,7 @@ install_arronax () {
 
 	# Add required PPA repository
 	# If detailed output is desired, execute accordingly
-	if [ "$1" = 'silent' ]; then
+	if [ "$1" = $silent_installation_keyword ]; then
 		sudo add-apt-repository -y ppa:diesch/testing >> log/log.txt 2>&1;
 	else
 		sudo add-apt-repository ppa:diesch/testing;
@@ -135,7 +135,7 @@ install_arronax () {
 	
 	# Update repository
 	# If detailed output is desired, execute accordingly
-	if [ "$1" = 'silent' ]; then
+	if [ "$1" = $silent_installation_keyword ]; then
 		sudo apt-get update >> log/log.txt 2>&1;
 	else
 		sudo apt-get update;
@@ -144,7 +144,7 @@ install_arronax () {
 	
 	# Install the program
 	# If detailed output is desired, execute accordingly
-	if [ "$1" = 'silent' ]; then
+	if [ "$1" = $silent_installation_keyword ]; then
 		sudo apt-get install -y arronax >> log/log.txt 2>&1;
 	else
 		sudo apt-get install arronax;
@@ -163,7 +163,7 @@ install_sublime () {
 
 	# Add required PPA repository
 	# If detailed output is desired, execute accordingly
-	if [ "$1" = 'silent' ]; then
+	if [ "$1" = $silent_installation_keyword ]; then
 		sudo add-apt-repository -y \
 			ppa:webupd8team/sublime-text-2 >> log/log.txt 2>&1;
 	else
@@ -173,7 +173,7 @@ install_sublime () {
 	
 	# Update repository
 	# If detailed output is desired, execute accordingly
-	if [ "$1" = 'silent' ]; then
+	if [ "$1" = $silent_installation_keyword ]; then
 		sudo apt-get update >> log/log.txt 2>&1;
 	else
 		sudo apt-get update;
@@ -182,7 +182,7 @@ install_sublime () {
 
 	# Install the program
 	# If detailed output is desired, execute accordingly
-	if [ "$1" = 'silent' ]; then
+	if [ "$1" = $silent_installation_keyword ]; then
 		sudo apt-get install -y sublime-text >> log/log.txt 2>&1;
 	else
 		sudo apt-get install sublime-text;
@@ -201,7 +201,7 @@ install_vim () {
 	
 	# Update repository
 	# If detailed output is desired, execute accordingly
-	if [ "$1" = 'silent' ]; then
+	if [ "$1" = $silent_installation_keyword ]; then
 		sudo apt-get update >> log/log.txt 2>&1;
 	else
 		sudo apt-get update;
@@ -210,7 +210,7 @@ install_vim () {
 
 	# Install the program
 	# If detailed output is desired, execute accordingly
-	if [ "$1" = 'silent' ]; then
+	if [ "$1" = $silent_installation_keyword ]; then
 		sudo apt-get install -y vim >> log/log.txt 2>&1;
 	else
 		sudo apt-get install vim;
@@ -227,7 +227,7 @@ install_all () {
 	# Initial feedback
 	log_initial_feedback "Installation of ALL programs started!";
 
-	if [ "$1" = 'silent' ]; then
+	if [ "$1" = silent_installation_keyword ]; then
 		# A
 		install_arronax silent;
 
