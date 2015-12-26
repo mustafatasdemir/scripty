@@ -1,12 +1,12 @@
 #!/bin/bash
-#title				: scripty.sh
-#description		: This script will help you automate installation and
-#					restoration process.
-#author				: Mustafa Tasdemir
-#date				: 20151101
-#version 			: 0.1    
-#usage				: sudo sh scripty.sh
-#notes				: Make sure you run this script in super user mode
+#title              : scripty.sh
+#description        : This script will help you automate installation and
+#                   restoration process.
+#author             : Mustafa Tasdemir
+#date               : 20151101
+#version            : 0.1    
+#usage              : sudo sh scripty.sh
+#notes              : Make sure you run this script in super user mode
 #==============================================================================
 
 
@@ -20,6 +20,7 @@
 # Used to indicate the progress made
 progress_string="[================================================]";
 silent_installation_keyword="silent";
+error_flag=0;
 
 #
 #
@@ -52,11 +53,11 @@ update_progress () {
 	# Total count
 	total=$(( $2 ));
 	# Print the progress depending on the character count in progress string
-  	pd=$(( $count * 50 / $total ));
-  	printf "\rProgress[$3]: %3d.%1d%% %.${pd}s" \
-  	$(( $count * 100 / $total )) \
-  	$(( ($count * 1000 / $total) % 10 )) \
-  	$progress_string;
+	pd=$(( $count * 50 / $total ));
+	printf "\rProgress[$3]: %3d.%1d%% %.${pd}s" \
+	$(( $count * 100 / $total )) \
+	$(( ($count * 1000 / $total) % 10 )) \
+	$progress_string;
 }
 
 # Logs initial feedback and underlines the log message
@@ -77,6 +78,20 @@ log_initial_feedback () {
 		start=`expr $start + 1`
 	done
 	printf "\n";
+}
+
+final_feedback () {
+	if [ "$error_flag" = '1' ]; then
+		echo "Invalid Option! Please, specify one of above options!";
+		error_flag=0;
+	else
+		echo "\nTask finished! Press 'Enter' to continue!";
+	fi
+}
+
+invalid_option () {
+	error_flag=1;
+	echo "Invalid Option! Please, specify one of above options!";
 }
 
 # Exit the program when prompted
@@ -107,25 +122,35 @@ install_arronax () {
 
 	# Initial feedback
 	log_initial_feedback "Installation of Arronax started!";
-	update_progress count total_steps Arronax;				# Update progress
+	update_progress count total_steps Arronax;              # Update progress
 
 	# Add required PPA repository
-	sudo add-apt-repository -y ppa:diesch/testing >> log/log.txt 2>&1;
-	update_progress count total_steps Arronax;				# Update progress
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = 'silent' ]; then
+		sudo add-apt-repository -y ppa:diesch/testing >> log/log.txt 2>&1;
+	else
+		sudo add-apt-repository ppa:diesch/testing;
+	fi
+	update_progress count total_steps Arronax;              # Update progress
 	
 	# Update repository
-	sudo apt-get update >> log/log.txt 2>&1;
-	update_progress count total_steps Arronax;				# Update progress
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = 'silent' ]; then
+		sudo apt-get update >> log/log.txt 2>&1;
+	else
+		sudo apt-get update;
+	fi
+	update_progress count total_steps Arronax;              # Update progress
 	
 	# Install the program
 	# If detailed output is desired, execute accordingly
 	if [ "$1" = 'silent' ]; then
 		sudo apt-get install -y arronax >> log/log.txt 2>&1;
 	else
-		sudo apt-get install -y arronax;
+		sudo apt-get install arronax;
 	fi
 
-	update_progress count total_steps Arronax;				# Update progress
+	update_progress count total_steps Arronax;              # Update progress
 }
 
 install_sublime () {
@@ -134,26 +159,65 @@ install_sublime () {
 
 	# Initial feedback
 	log_initial_feedback "Installation of Sublime Text 2 started!";
-	update_progress count total_steps Sublime;				# Update progress
+	update_progress count total_steps Sublime;              # Update progress
 
 	# Add required PPA repository
-	sudo add-apt-repository -y \
-	ppa:webupd8team/sublime-text-2 >> log/log.txt 2>&1;
-	update_progress count total_steps Sublime;				# Update progress
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = 'silent' ]; then
+		sudo add-apt-repository -y \
+			ppa:webupd8team/sublime-text-2 >> log/log.txt 2>&1;
+	else
+		sudo add-apt-repository ppa:webupd8team/sublime-text-2;
+	fi
+	update_progress count total_steps Sublime;              # Update progress
 	
 	# Update repository
-	sudo apt-get update >> log/log.txt 2>&1;
-	update_progress count total_steps Sublime;				# Update progress
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = 'silent' ]; then
+		sudo apt-get update >> log/log.txt 2>&1;
+	else
+		sudo apt-get update;
+	fi
+	update_progress count total_steps Sublime;              # Update progress
 
 	# Install the program
 	# If detailed output is desired, execute accordingly
 	if [ "$1" = 'silent' ]; then
 		sudo apt-get install -y sublime-text >> log/log.txt 2>&1;
 	else
-		sudo apt-get install -y sublime-text;
+		sudo apt-get install sublime-text;
 	fi
 	
-	update_progress count total_steps Sublime;				# Update progress
+	update_progress count total_steps Sublime;              # Update progress
+}
+
+install_vim () {
+	count=-1;
+	total_steps=2;
+
+	# Initial feedback
+	log_initial_feedback "Installation of vim started!";
+	update_progress count total_steps Vim;                  # Update progress
+	
+	# Update repository
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = 'silent' ]; then
+		sudo apt-get update >> log/log.txt 2>&1;
+	else
+		sudo apt-get update;
+	fi  
+	update_progress count total_steps Vim;                  # Update progress
+
+	# Install the program
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = 'silent' ]; then
+		sudo apt-get install -y vim >> log/log.txt 2>&1;
+	else
+		sudo apt-get install vim;
+	fi
+	
+	update_progress count total_steps Vim;                  # Update progress
+
 }
 
 
@@ -163,11 +227,25 @@ install_all () {
 	# Initial feedback
 	log_initial_feedback "Installation of ALL programs started!";
 
-	# A
-	install_arronax silent;
+	if [ "$1" = 'silent' ]; then
+		# A
+		install_arronax silent;
 
-	# S
-	install_sublime silent;
+		# S
+		install_sublime silent;
+
+		# V
+		install_vim silent;
+	else
+		# A
+		install_arronax;
+
+		# S
+		install_sublime;
+
+		# V
+		install_vim;
+	fi
 }
 
 
@@ -181,18 +259,34 @@ install_menu () {
 		==============================
 		Install A Program
 		------------------------------
+
 		Please enter your choice:
-		(with specified input after the option)
+		(with category letter concatenated with specified
+			number before the option)
 		You can also append "v" to the input to see output of installation
+		Example:
+		(a1/A1) installs the program under alphabet A whose number is 1
+			on the right
+		(a1v/A1v) installs the program under alphabet A whose number is 1
+			on the right. You can see command output with this option
+		Type 'a/A' to install all programs listed
+		Type 'b/B' to go back to main menu
 
-		A_____
-		Arronax (1)
+		------------------------------
+		List of Programs
+		------------------------------
 
-		S_____
-		Sublime Text 2 (2)
+		A___
+		(1) Arronax
+
+		S___
+		(1) Sublime Text 2
+
+		V___
+		(1) Vim
 		
-		________________________
-		INSTALL ALL PROGRAMS (a)
+		__________________________
+		INSTALL ALL PROGRAMS (a/A)
 
 		------------------------------
 			   Back to Main Menu (B/b)
@@ -200,16 +294,30 @@ install_menu () {
 IMEOF
 		read install_option
 		case "$install_option" in
-		"a")  install_all													;;
-		"1")  install_arronax												;;
-		"1v")  install_arronax silent										;;
-		"2")  install_sublime												;;
-		"2v")  install_sublime silent										;;
-		"B")  return						;;
-		"b")  return						;; 
-		 * )  echo "Invalid Option! Please, specify any of above options!"	;;
+			# All programs
+			"a"|"A")        install_all silent                          ;;
+			"av"|"Av")      install_all                                 ;;
+
+			# A___
+			"a1"|"A1")      install_arronax silent                      ;;
+			"a1v"|"A1v")    install_arronax                             ;;
+
+			
+			# S___
+			"s1"|"S1")      install_sublime silent                      ;;
+			"s1v"|"S1v")    install_sublime                             ;;
+			
+
+			# V___
+			"v1"|"V1")      install_vim silent                          ;;
+			"v1v"|"V1v")    install_vim                                 ;;
+
+			# Others
+			"B")            return                                      ;;
+			"b")            return                                      ;; 
+			* )             error_flag=1;                               ;;
 		esac
-		echo "Task finished! \nPress 'Enter' to continue!";
+		final_feedback;
 		read finished;
 	done
 }
@@ -241,7 +349,7 @@ restore_gnome_extensions () {
 #
 #
 
-
+# Prepare logging elements before beginning
 prepare_log_env;
 
 while :
@@ -265,12 +373,12 @@ do
 EOF
 	read option
 	case "$option" in
-	"1")  install_menu 														;;
-	"2")  install_menu 														;;
-	"3")  echo "you chose choice 3" 				;;
-	"Q")  exit_program						;;
-	"q")  exit_program						;; 
-	 * )  echo "Invalid Option! Please, specify any of above options!"		;;
+	"1")  install_menu                                                      ;;
+	"2")  install_menu                                                      ;;
+	"3")  echo "you chose choice 3"                 ;;
+	"Q")  exit_program                      ;;
+	"q")  exit_program                      ;; 
+	 * )  echo "Invalid Option! Please, specify any of above options!"      ;;
 	esac
 done
 
