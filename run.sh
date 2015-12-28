@@ -4,7 +4,7 @@
 #                   restoration process.
 #author             : Mustafa Tasdemir
 #date               : 20151101
-#version            : 0.1    
+#version            : 0.1
 #usage              : sudo sh scripty.sh
 #notes              : Make sure you run this script in super user mode
 #==============================================================================
@@ -19,7 +19,7 @@
 
 # Used to indicate the progress made
 progress_string="[================================================]";
-silent_installation_keyword="silent";
+silent_install="silent";
 error_flag=0;
 
 #
@@ -116,6 +116,7 @@ exit_program () {
 #
 #
 
+# Install apss that start with 'A'
 install_arronax () {
 	count=-1;
 	total_steps=3;
@@ -126,25 +127,25 @@ install_arronax () {
 
 	# Add required PPA repository
 	# If detailed output is desired, execute accordingly
-	if [ "$1" = $silent_installation_keyword ]; then
+	if [ "$1" = $silent_install ]; then
 		sudo add-apt-repository -y ppa:diesch/testing >> log/log.txt 2>&1;
 	else
 		sudo add-apt-repository ppa:diesch/testing;
 	fi
 	update_progress count total_steps Arronax;              # Update progress
-	
+
 	# Update repository
 	# If detailed output is desired, execute accordingly
-	if [ "$1" = $silent_installation_keyword ]; then
+	if [ "$1" = $silent_install ]; then
 		sudo apt-get update >> log/log.txt 2>&1;
 	else
 		sudo apt-get update;
 	fi
 	update_progress count total_steps Arronax;              # Update progress
-	
+
 	# Install the program
 	# If detailed output is desired, execute accordingly
-	if [ "$1" = $silent_installation_keyword ]; then
+	if [ "$1" = $silent_install ]; then
 		sudo apt-get install -y arronax >> log/log.txt 2>&1;
 	else
 		sudo apt-get install arronax;
@@ -153,6 +154,90 @@ install_arronax () {
 	update_progress count total_steps Arronax;              # Update progress
 }
 
+
+# Install apss that start with 'C'
+install_clementine () {
+	count=-1;
+	total_steps=3;
+
+	# Initial feedback
+	log_initial_feedback "Installation of Clementine started!";
+	update_progress count total_steps Clementine;			# Update progress
+
+	# Add required PPA repository
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo add-apt-repository -y \
+			ppa:me-davidsansome/clementine >> log/log.txt 2>&1;
+	else
+		sudo add-apt-repository ppa:me-davidsansome/clementine;
+	fi
+	update_progress count total_steps Clementine;			# Update progress
+
+	# Update repository
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get update >> log/log.txt 2>&1;
+	else
+		sudo apt-get update;
+	fi
+	update_progress count total_steps Clementine;			# Update progress
+
+	# Install the program
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get install -y clementine >> log/log.txt 2>&1;
+	else
+		sudo apt-get install clementine;
+	fi
+
+	update_progress count total_steps Clementine;			# Update progress
+
+}
+
+
+# Install apss that start with 'P'
+install_pidgin () {
+	count=-1;
+	total_steps=3;
+
+	# Initial feedback
+	log_initial_feedback "Installation of Pidgin started!";
+	update_progress count total_steps Pidgin;			# Update progress
+
+	# Add required PPA repository
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo add-apt-repository -y \
+			ppa:pidgin-developers/ppa >> log/log.txt 2>&1;
+	else
+		sudo add-apt-repository ppa:pidgin-developers/ppa;
+	fi
+	update_progress count total_steps Pidgin;			# Update progress
+
+	# Update repository
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get update >> log/log.txt 2>&1;
+	else
+		sudo apt-get update;
+	fi
+	update_progress count total_steps Pidgin;			# Update progress
+
+	# Install the program
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get install -y pidgin >> log/log.txt 2>&1;
+	else
+		sudo apt-get install pidgin;
+	fi
+
+	update_progress count total_steps Pidgin;			# Update progress
+
+}
+
+
+# Install apss that start with 'S'
 install_sublime () {
 	count=-1;
 	total_steps=3;
@@ -163,17 +248,17 @@ install_sublime () {
 
 	# Add required PPA repository
 	# If detailed output is desired, execute accordingly
-	if [ "$1" = $silent_installation_keyword ]; then
+	if [ "$1" = $silent_install ]; then
 		sudo add-apt-repository -y \
 			ppa:webupd8team/sublime-text-2 >> log/log.txt 2>&1;
 	else
 		sudo add-apt-repository ppa:webupd8team/sublime-text-2;
 	fi
 	update_progress count total_steps Sublime;              # Update progress
-	
+
 	# Update repository
 	# If detailed output is desired, execute accordingly
-	if [ "$1" = $silent_installation_keyword ]; then
+	if [ "$1" = $silent_install ]; then
 		sudo apt-get update >> log/log.txt 2>&1;
 	else
 		sudo apt-get update;
@@ -182,15 +267,56 @@ install_sublime () {
 
 	# Install the program
 	# If detailed output is desired, execute accordingly
-	if [ "$1" = $silent_installation_keyword ]; then
+	if [ "$1" = $silent_install ]; then
 		sudo apt-get install -y sublime-text >> log/log.txt 2>&1;
 	else
 		sudo apt-get install sublime-text;
 	fi
-	
+
 	update_progress count total_steps Sublime;              # Update progress
 }
 
+# Install apss that start with 'T'
+install_terminator () {
+	count=-1;
+	total_steps=3;
+
+	# Initial feedback
+	log_initial_feedback "Installation of Terminator started!";
+	update_progress count total_steps Terminator;			# Update progress
+
+	# Add required PPA repository
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo add-apt-repository -y \
+			ppa:gnome-terminator >> log/log.txt 2>&1;
+	else
+		sudo add-apt-repository ppa:gnome-terminator;
+	fi
+	update_progress count total_steps Terminator;			# Update progress
+
+	# Update repository
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get update >> log/log.txt 2>&1;
+	else
+		sudo apt-get update;
+	fi
+	update_progress count total_steps Terminator;			# Update progress
+
+	# Install the program
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get install -y terminator >> log/log.txt 2>&1;
+	else
+		sudo apt-get install terminator;
+	fi
+
+	update_progress count total_steps Terminator;			# Update progress
+}
+
+
+# Install apss that start with 'V'
 install_vim () {
 	count=-1;
 	total_steps=2;
@@ -198,24 +324,24 @@ install_vim () {
 	# Initial feedback
 	log_initial_feedback "Installation of vim started!";
 	update_progress count total_steps Vim;                  # Update progress
-	
+
 	# Update repository
 	# If detailed output is desired, execute accordingly
-	if [ "$1" = $silent_installation_keyword ]; then
+	if [ "$1" = $silent_install ]; then
 		sudo apt-get update >> log/log.txt 2>&1;
 	else
 		sudo apt-get update;
-	fi  
+	fi
 	update_progress count total_steps Vim;                  # Update progress
 
 	# Install the program
 	# If detailed output is desired, execute accordingly
-	if [ "$1" = $silent_installation_keyword ]; then
+	if [ "$1" = $silent_install ]; then
 		sudo apt-get install -y vim >> log/log.txt 2>&1;
 	else
 		sudo apt-get install vim;
 	fi
-	
+
 	update_progress count total_steps Vim;                  # Update progress
 
 }
@@ -227,21 +353,39 @@ install_all () {
 	# Initial feedback
 	log_initial_feedback "Installation of ALL programs started!";
 
-	if [ "$1" = silent_installation_keyword ]; then
+	if [ "$1" = silent_install ]; then
 		# A
-		install_arronax $silent_installation_keyword;
+		install_arronax $silent_install;
+
+		# C
+		install_clementine $silent_install;
+
+		# P
+		install_pidgin $silent_install;
 
 		# S
-		install_sublime $silent_installation_keyword;
+		install_sublime $silent_install;
+
+		# T
+		install_terminator $silent_install;
 
 		# V
-		install_vim $silent_installation_keyword;
+		install_vim $silent_install;
 	else
 		# A
 		install_arronax;
 
+		# C
+		install_clementine;
+
+		# P
+		install_pidgin;
+
 		# S
 		install_sublime;
+
+		# T
+		install_terminator;
 
 		# V
 		install_vim;
@@ -279,12 +423,21 @@ install_menu () {
 		A___
 		(1) Arronax
 
+		C___
+		(1) Clementine
+
+		P___
+		(1) Pidgin
+
 		S___
 		(1) Sublime Text 2
 
+		T___
+		(1) Terminator
+
 		V___
 		(1) Vim
-		
+
 		__________________________
 		INSTALL ALL PROGRAMS (a/A)
 
@@ -295,26 +448,41 @@ IMEOF
 		read install_option
 		case "$install_option" in
 			# All programs
-			"a"|"A")		install_all $silent_installation_keyword		;;
+			"a"|"A")		install_all $silent_install						;;
 			"av"|"Av")		install_all										;;
 
 			# A___
-			"a1"|"A1")		install_arronax $silent_installation_keyword	;;
+			"a1"|"A1")		install_arronax $silent_install					;;
 			"a1v"|"A1v")	install_arronax									;;
 
-			
+
+			# C___
+			"c1"|"C1")		install_clementine $silent_install				;;
+			"c1v"|"C1v")	install_clementine								;;
+
+
+			# P___
+			"p1"|"P1")		install_pidgin $silent_install					;;
+			"p1v"|"P1v")	install_pidgin									;;
+
+
 			# S___
-			"s1"|"S1")		install_sublime $silent_installation_keyword	;;
+			"s1"|"S1")		install_sublime $silent_install	;;
 			"s1v"|"S1v")	install_sublime									;;
-			
+
+
+			# T___
+			"t1"|"T1")		install_terminator $silent_install				;;
+			"t1v"|"T1v")	install_terminator								;;
+
 
 			# V___
-			"v1"|"V1")		install_vim $silent_installation_keyword		;;
+			"v1"|"V1")		install_vim $silent_install						;;
 			"v1v"|"V1v")	install_vim										;;
 
 			# Others
 			"B")			return											;;
-			"b")			return											;; 
+			"b")			return											;;
 			* )				error_flag=1;									;;
 		esac
 		final_feedback;
@@ -377,7 +545,7 @@ EOF
 	"2")  install_menu                                                      ;;
 	"3")  echo "you chose choice 3"                 ;;
 	"Q")  exit_program                      ;;
-	"q")  exit_program                      ;; 
+	"q")  exit_program                      ;;
 	 * )  echo "Invalid Option! Please, specify any of above options!"      ;;
 	esac
 done
