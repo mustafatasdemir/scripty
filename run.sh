@@ -194,6 +194,35 @@ install_clementine () {
 	update_progress count total_steps Clementine;			# Update progress
 }
 
+# Install apss that start with 'F'
+install_firefox () {
+	count=-1;
+	total_steps=2;
+
+	# Initial feedback
+	log_initial_feedback "Installation of Firefox started!";
+	update_progress count total_steps Firefox;			# Update progress
+
+	# Update repository
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get update >> log/log.txt 2>&1;
+	else
+		sudo apt-get update;
+	fi
+	update_progress count total_steps Firefox;			# Update progress
+
+	# Install the program
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get install -y firefox >> log/log.txt 2>&1;
+	else
+		sudo apt-get install firefox;
+	fi
+
+	update_progress count total_steps Firefox;			# Update progress
+}
+
 # Install apss that start with 'K'
 install_kid3 () {
 	count=-1;
@@ -396,6 +425,9 @@ install_all () {
 		# C
 		install_clementine $silent_install;
 
+		# F
+		install_firefox $silent_install;
+
 		# K
 		install_kid3 $silent_install;
 
@@ -416,6 +448,9 @@ install_all () {
 
 		# C
 		install_clementine;
+
+		# F
+		install_firefox;
 
 		# K
 		install_kid3;
@@ -468,6 +503,9 @@ install_menu () {
 		C___
 		(1) Clementine
 
+		F___
+		(1) Firefox
+
 		K___
 		(1) Kid3
 
@@ -504,6 +542,11 @@ IMEOF
 			# C___
 			"c1"|"C1")		install_clementine $silent_install				;;
 			"c1v"|"C1v")	install_clementine								;;
+
+
+			# F___
+			"f1"|"F1")		install_firefox $silent_install					;;
+			"f1v"|"F1v")	install_firefox									;;
 
 
 			# K___
