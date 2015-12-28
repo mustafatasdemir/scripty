@@ -192,7 +192,45 @@ install_clementine () {
 	fi
 
 	update_progress count total_steps Clementine;			# Update progress
+}
 
+# Install apss that start with 'K'
+install_kid3 () {
+	count=-1;
+	total_steps=3;
+
+	# Initial feedback
+	log_initial_feedback "Installation of Kid3 started!";
+	update_progress count total_steps Kid3;			# Update progress
+
+	# Add required PPA repository
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo add-apt-repository -y \
+			ppa:ufleisch/kid3 >> log/log.txt 2>&1;
+	else
+		sudo add-apt-repository ppa:ufleisch/kid3;
+	fi
+	update_progress count total_steps Kid3;			# Update progress
+
+	# Update repository
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get update >> log/log.txt 2>&1;
+	else
+		sudo apt-get update;
+	fi
+	update_progress count total_steps Kid3;			# Update progress
+
+	# Install the program
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get install -y kid3 >> log/log.txt 2>&1;
+	else
+		sudo apt-get install kid3;
+	fi
+
+	update_progress count total_steps Kid3;			# Update progress
 }
 
 
@@ -233,7 +271,6 @@ install_pidgin () {
 	fi
 
 	update_progress count total_steps Pidgin;			# Update progress
-
 }
 
 
@@ -343,7 +380,6 @@ install_vim () {
 	fi
 
 	update_progress count total_steps Vim;                  # Update progress
-
 }
 
 
@@ -359,6 +395,9 @@ install_all () {
 
 		# C
 		install_clementine $silent_install;
+
+		# K
+		install_kid3 $silent_install;
 
 		# P
 		install_pidgin $silent_install;
@@ -377,6 +416,9 @@ install_all () {
 
 		# C
 		install_clementine;
+
+		# K
+		install_kid3;
 
 		# P
 		install_pidgin;
@@ -426,6 +468,9 @@ install_menu () {
 		C___
 		(1) Clementine
 
+		K___
+		(1) Kid3
+
 		P___
 		(1) Pidgin
 
@@ -459,6 +504,11 @@ IMEOF
 			# C___
 			"c1"|"C1")		install_clementine $silent_install				;;
 			"c1v"|"C1v")	install_clementine								;;
+
+
+			# K___
+			"k1"|"K1")		install_kid3 $silent_install					;;
+			"k1v"|"K1v")	install_kid3									;;
 
 
 			# P___
