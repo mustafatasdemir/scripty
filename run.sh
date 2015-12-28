@@ -223,6 +223,45 @@ install_firefox () {
 	update_progress count total_steps Firefox;			# Update progress
 }
 
+# Install apss that start with 'G'
+install_gimp () {
+	count=-1;
+	total_steps=3;
+
+	# Initial feedback
+	log_initial_feedback "Installation of Gimp started!";
+	update_progress count total_steps Gimp;			# Update progress
+
+	# Add required PPA repository
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo add-apt-repository -y \
+			ppa:otto-kesselgulasch/gimp >> log/log.txt 2>&1;
+	else
+		sudo add-apt-repository ppa:otto-kesselgulasch/gimp;
+	fi
+	update_progress count total_steps Gimp;			# Update progress
+
+	# Update repository
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get update >> log/log.txt 2>&1;
+	else
+		sudo apt-get update;
+	fi
+	update_progress count total_steps Gimp;			# Update progress
+
+	# Install the program
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get install -y gimp >> log/log.txt 2>&1;
+	else
+		sudo apt-get install gimp;
+	fi
+
+	update_progress count total_steps Gimp;			# Update progress
+}
+
 # Install apss that start with 'K'
 install_kid3 () {
 	count=-1;
@@ -428,6 +467,9 @@ install_all () {
 		# F
 		install_firefox $silent_install;
 
+		# G
+		install_gimp $silent_install;
+
 		# K
 		install_kid3 $silent_install;
 
@@ -451,6 +493,9 @@ install_all () {
 
 		# F
 		install_firefox;
+
+		# G
+		install_gimp;
 
 		# K
 		install_kid3;
@@ -506,6 +551,9 @@ install_menu () {
 		F___
 		(1) Firefox
 
+		G___
+		(1) Gimp
+
 		K___
 		(1) Kid3
 
@@ -547,6 +595,11 @@ IMEOF
 			# F___
 			"f1"|"F1")		install_firefox $silent_install					;;
 			"f1v"|"F1v")	install_firefox									;;
+
+
+			# G___
+			"g1"|"G1")		install_gimp $silent_install					;;
+			"g1v"|"G1v")	install_gimp									;;
 
 
 			# K___
