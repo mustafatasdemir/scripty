@@ -715,8 +715,13 @@ restore_terminal_welcome_message_via_file () {
 		sudo rm -Rf ~/bash_welcome_message;
 		sudo cp files/bash_welcome_message ~/;
 	fi
-	sudo sed -i "/\b\(bash_welcome_message\)\b/d" ~/.bashrc
-	sudo sed -i '$a printf "$(cat ~/bash_welcome_message)"' ~/.bashrc
+	sudo sed -i "/\b\(bash_welcome_message\)\b/d" ~/.bashrc;
+	sudo sed -i '$a printf "$(cat ~/bash_welcome_message)"' ~/.bashrc;
+}
+
+delete_terminal_welcome_message () {
+	sudo rm -Rf ~/bash_welcome_message;
+	sudo sed -i "/\b\(bash_welcome_message\)\b/d" ~/.bashrc;
 }
 
 set_terminal_welcome_message () {
@@ -770,6 +775,50 @@ BASHWELCOME
 
 }
 
+remove_terminal_welcome_message () {
+	while :
+	do
+		# Clear the contents
+		clear
+		cat<<BASHWELCOME
+		==============================
+		Remove Welcome Message for Terminal
+		------------------------------
+
+		You are about to remove welcome message for your system terminal.
+		This feature will work if you have set the message using this
+		program. Otherwise, it won't take effect!
+
+		Please enter your choice:
+		(with with specified letter in brackets)
+		Type 'b/B' to go back to main menu
+
+		------------------------------
+		Proceed?
+		------------------------------
+
+		[Y]es! 									[N]o!!!
+
+
+		------------------------------
+			   Back to Main Menu (B/b)
+		------------------------------
+BASHWELCOME
+		read remove_option
+		case "$remove_option" in
+
+			"Y"|"y")		delete_terminal_welcome_message					;;
+			"N"|"n")		return											;;
+
+			# Others
+			"B"|"b")		back_flag=1 && return							;;
+			* )				error_flag=1;									;;
+		esac
+		final_feedback;
+	done
+
+}
+
 
 # Tweak & Restore Menu
 tweak_restore_menu () {
@@ -791,6 +840,7 @@ tweak_restore_menu () {
 		------------------------------
 
 		(1) Set Welcome Message for Terminal
+		(2) Remove Welcome Message from Terminal
 
 
 		------------------------------
@@ -801,6 +851,7 @@ TWEAKRESTORE
 		case "$restore_option" in
 
 			"1")		set_terminal_welcome_message						;;
+			"2")		remove_terminal_welcome_message						;;
 
 			# Others
 			"B"|"b")	back_flag=1 && return								;;
