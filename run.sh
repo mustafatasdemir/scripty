@@ -262,6 +262,44 @@ install_gimp () {
 	update_progress count total_steps Gimp;			# Update progress
 }
 
+install_gmusicbrowser () {
+	count=-1;
+	total_steps=3;
+
+	# Initial feedback
+	log_initial_feedback "Installation of Gmusicbrowser started!";
+	update_progress count total_steps Gmusicbrowser;			# Update progress
+
+	# Add required PPA repository
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo add-apt-repository -y \
+			ppa:andreas-boettger/gmusicbrowser-daily >> log/log.txt 2>&1;
+	else
+		sudo add-apt-repository ppa:andreas-boettger/gmusicbrowser-daily;
+	fi
+	update_progress count total_steps Gmusicbrowser;			# Update progress
+
+	# Update repository
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get update >> log/log.txt 2>&1;
+	else
+		sudo apt-get update;
+	fi
+	update_progress count total_steps Gmusicbrowser;			# Update progress
+
+	# Install the program
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get install -y gmusicbrowser >> log/log.txt 2>&1;
+	else
+		sudo apt-get install gmusicbrowser;
+	fi
+
+	update_progress count total_steps Gmusicbrowser;			# Update progress
+}
+
 # Install apss that start with 'K'
 install_kid3 () {
 	count=-1;
@@ -469,6 +507,7 @@ install_all () {
 
 		# G
 		install_gimp $silent_install;
+		install_gmusicbrowser $silent_install;
 
 		# K
 		install_kid3 $silent_install;
@@ -496,6 +535,7 @@ install_all () {
 
 		# G
 		install_gimp;
+		install_gmusicbrowser;
 
 		# K
 		install_kid3;
@@ -553,6 +593,7 @@ install_menu () {
 
 		G___
 		(1) Gimp
+		(1) Gmusicbrowser
 
 		K___
 		(1) Kid3
@@ -600,6 +641,8 @@ IMEOF
 			# G___
 			"g1"|"G1")		install_gimp $silent_install					;;
 			"g1v"|"G1v")	install_gimp									;;
+			"g2"|"G2")		install_gmusicbrowser $silent_install			;;
+			"g2v"|"G2v")	install_gmusicbrowser							;;
 
 
 			# K___
