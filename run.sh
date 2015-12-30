@@ -21,6 +21,7 @@
 progress_string="[================================================]";
 silent_install="silent";
 error_flag=0;
+back_flag=0;
 
 #
 #
@@ -81,11 +82,18 @@ log_initial_feedback () {
 }
 
 final_feedback () {
-	if [ "$error_flag" = '1' ]; then
-		echo "Invalid Option! Please, specify one of above options!";
-		error_flag=0;
+	# If user did not choose back, perform the evaluation
+	if [ "$back_flag" = '0' ]; then
+		if [ "$error_flag" = '1' ]; then
+			echo "Invalid Option! Please, specify one of above options!";
+			error_flag=0;
+		else
+			echo "\nTask finished! Press 'Enter' to continue!";
+		fi
+		read finished;
 	else
-		echo "\nTask finished! Press 'Enter' to continue!";
+		# Reset the back flag
+		back_flag=0;
 	fi
 }
 
@@ -670,12 +678,10 @@ IMEOF
 			"v1v"|"V1v")	install_vim										;;
 
 			# Others
-			"B")			return											;;
-			"b")			return											;;
+			"B"|"b")		back_flag=1 && return							;;
 			* )				error_flag=1;									;;
 		esac
 		final_feedback;
-		read finished;
 	done
 }
 
@@ -689,6 +695,13 @@ IMEOF
 
 #==============================================================================
 
+
+# *** BEGIN REGION *** Tweak and/or restore features
+#
+#
+#
+#
+
 # Restorea Gnome Shell Extensions that can be configured in Tweak Tool
 restore_gnome_extensions () {
 	# First remove the existing extensions folders
@@ -697,8 +710,106 @@ restore_gnome_extensions () {
 	sudo tar -zxvf extensions/extensions.tar.gz -C ~/.local/share/gnome-shell/
 }
 
+restore_terminal_welcome_message_via_file () {
+	sudo sed -i "/\b\(bash_welcome_message\)\b/d" ~/.bashrc
+	sudo sed -i '$a printf "$(cat ~/bash_welcome_message)"' ~/.bashrc
+}
+
+set_terminal_welcome_message () {
+	while :
+	do
+		# Clear the contents
+		clear
+		cat<<BASHWELCOME
+		==============================
+		Set Welcome Message for Terminal
+		------------------------------
+
+		You are about to set a welcome message for your system terminal.
+		Please, make sure that you have a file named as 
+		'bash_welcome_message' under user's home directory
+		for this script to work effectively!
+
+		Please enter your choice:
+		(with with specified letter in brackets)
+		Type 'b/B' to go back to main menu
+
+		------------------------------
+		Proceed?
+		------------------------------
+
+		[Y]es! 									[N]o!!!
 
 
+		------------------------------
+			   Back to Main Menu (B/b)
+		------------------------------
+BASHWELCOME
+		read install_option
+		case "$install_option" in
+
+			"Y"|"y")		restore_terminal_welcome_message_via_file		;;
+			"N"|"n")		return											;;
+
+			# Others
+			"B"|"b")		back_flag=1 && return							;;
+			* )				error_flag=1;									;;
+		esac
+		final_feedback;
+	done
+
+}
+
+
+# Tweak & Restore Menu
+tweak_restore_menu () {
+	while :
+	do
+		# Clear the contents
+		clear
+		cat<<TWEAKRESTORE
+		==============================
+		Tweak & Restore Features
+		------------------------------
+
+		Please enter your choice:
+		(with specified number before the option)
+		Type 'b/B' to go back to main menu
+
+		------------------------------
+		List of Options
+		------------------------------
+
+		(1) Set Welcome Message for Terminal
+
+
+		------------------------------
+			   Back to Main Menu (B/b)
+		------------------------------
+TWEAKRESTORE
+		read restore_option
+		case "$restore_option" in
+
+			"1")		set_terminal_welcome_message						;;
+
+			# Others
+			"B"|"b")	back_flag=1 && return								;;
+			* )			error_flag=1;										;;
+		esac
+		final_feedback;
+	done
+}
+
+
+
+#
+#
+#
+#
+# *** END REGION *** Tweak and/or restore features
+
+
+#==============================================================================
 
 # *** BEGIN REGION *** MAIN
 #
@@ -720,8 +831,8 @@ do
 	Please enter your choice:
 	(with specified input before the option)
 
-	(1) Install -- Use this option to install several programs
-	Restore Gnome Extensions (1)
+	(1) Install -- This option lets you install several programs
+	(2) Tweak & Restore -- This option lets you change features
 	Install (2)
 	Option (3)
 	------------------------------
@@ -730,13 +841,17 @@ do
 EOF
 	read option
 	case "$option" in
-	"1")  install_menu                                                      ;;
-	"2")  install_menu                                                      ;;
-	"3")  echo "you chose choice 3"                 ;;
-	"Q")  exit_program                      ;;
-	"q")  exit_program                      ;;
-	 * )  echo "Invalid Option! Please, specify any of above options!"      ;;
+
+		"1")		install_menu											;;
+		"2")		tweak_restore_menu										;;
+		"3")		echo "you chose choice 3"								;;
+
+
+		# Others
+		"Q"|"q")	exit_program											;;
+		* )			error_flag=1;											;;
 	esac
+	final_feedback;
 done
 
 #
