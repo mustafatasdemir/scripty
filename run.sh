@@ -711,6 +711,10 @@ restore_gnome_extensions () {
 }
 
 restore_terminal_welcome_message_via_file () {
+	if [ "$1" = 'use_default_file' ]; then
+		sudo rm -Rf ~/bash_welcome_message;
+		sudo cp files/bash_welcome_message ~/;
+	fi
 	sudo sed -i "/\b\(bash_welcome_message\)\b/d" ~/.bashrc
 	sudo sed -i '$a printf "$(cat ~/bash_welcome_message)"' ~/.bashrc
 }
@@ -732,6 +736,7 @@ set_terminal_welcome_message () {
 
 		Please enter your choice:
 		(with with specified letter in brackets)
+		Type 'c/C' to copy & use the file that comes with this installation
 		Type 'b/B' to go back to main menu
 
 		------------------------------
@@ -748,8 +753,13 @@ BASHWELCOME
 		read install_option
 		case "$install_option" in
 
-			"Y"|"y")		restore_terminal_welcome_message_via_file		;;
+			"Y"|"y")		restore_terminal_welcome_message_via_file \
+							${1-no_default_file}							;;
 			"N"|"n")		return											;;
+
+			# Use provided file
+			"C"|"c")		restore_terminal_welcome_message_via_file \
+							use_default_file								;;
 
 			# Others
 			"B"|"b")		back_flag=1 && return							;;
