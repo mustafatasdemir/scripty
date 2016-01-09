@@ -348,6 +348,46 @@ install_kid3 () {
 }
 
 
+# Install apss that start with 'M'
+install_mediaelch () {
+	count=-1;
+	total_steps=3;
+
+	# Initial feedback
+	log_initial_feedback "Installation of MediaElch started!";
+	update_progress count total_steps MediaElch;			# Update progress
+
+	# Add required PPA repository
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo add-apt-repository -y \
+			ppa:kvibes/mediaelch >> log/log.txt 2>&1;
+	else
+		sudo add-apt-repository ppa:kvibes/mediaelch;
+	fi
+	update_progress count total_steps MediaElch;			# Update progress
+
+	# Update repository
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get update >> log/log.txt 2>&1;
+	else
+		sudo apt-get update;
+	fi
+	update_progress count total_steps MediaElch;			# Update progress
+
+	# Install the program
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get install -y mediaelch >> log/log.txt 2>&1;
+	else
+		sudo apt-get install mediaelch;
+	fi
+
+	update_progress count total_steps MediaElch;			# Update progress
+}
+
+
 # Install apss that start with 'P'
 install_pidgin () {
 	count=-1;
@@ -520,6 +560,9 @@ install_all () {
 		# K
 		install_kid3 $silent_install;
 
+		# M
+		install_mediaelch $silent_install;
+
 		# P
 		install_pidgin $silent_install;
 
@@ -547,6 +590,9 @@ install_all () {
 
 		# K
 		install_kid3;
+
+		# M
+		install_mediaelch;
 
 		# P
 		install_pidgin;
@@ -606,6 +652,9 @@ install_menu () {
 		K___
 		(1) Kid3
 
+		K___
+		(1) Mediaelch
+
 		P___
 		(1) Pidgin
 
@@ -656,6 +705,11 @@ IMEOF
 			# K___
 			"k1"|"K1")		install_kid3 $silent_install					;;
 			"k1v"|"K1v")	install_kid3									;;
+
+
+			# M___
+			"m1"|"M1")		install_mediaelch $silent_install				;;
+			"m1v"|"M1v")	install_mediaelch								;;
 
 
 			# P___
