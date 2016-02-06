@@ -766,15 +766,15 @@ restore_gnome_extensions () {
 
 restore_terminal_welcome_message_via_file () {
 	if [ "$1" = 'use_default_file' ]; then
-		sudo rm -Rf ~/bash_welcome_message;
-		sudo cp files/bash_welcome_message ~/;
+		rm -Rf ~/bash_welcome_message;
+		cp files/bash_welcome_message ~/;
 	fi
 	sudo sed -i "/\b\(bash_welcome_message\)\b/d" ~/.bashrc;
 	sudo sed -i '$a printf "$(cat ~/bash_welcome_message)"' ~/.bashrc;
 }
 
 delete_terminal_welcome_message () {
-	sudo rm -Rf ~/bash_welcome_message;
+	rm -Rf ~/bash_welcome_message;
 	sudo sed -i "/\b\(bash_welcome_message\)\b/d" ~/.bashrc;
 }
 
