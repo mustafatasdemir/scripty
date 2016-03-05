@@ -202,6 +202,7 @@ install_clementine () {
 	update_progress count total_steps Clementine;			# Update progress
 }
 
+
 # Install apss that start with 'F'
 install_firefox () {
 	count=-1;
@@ -230,6 +231,7 @@ install_firefox () {
 
 	update_progress count total_steps Firefox;			# Update progress
 }
+
 
 # Install apss that start with 'G'
 install_gimp () {
@@ -276,7 +278,7 @@ install_gmusicbrowser () {
 
 	# Initial feedback
 	log_initial_feedback "Installation of Gmusicbrowser started!";
-	update_progress count total_steps Gmusicbrowser;			# Update progress
+	update_progress count total_steps Gmusicbrowser;		# Update progress
 
 	# Add required PPA repository
 	# If detailed output is desired, execute accordingly
@@ -286,7 +288,7 @@ install_gmusicbrowser () {
 	else
 		sudo add-apt-repository ppa:andreas-boettger/gmusicbrowser-daily;
 	fi
-	update_progress count total_steps Gmusicbrowser;			# Update progress
+	update_progress count total_steps Gmusicbrowser;		# Update progress
 
 	# Update repository
 	# If detailed output is desired, execute accordingly
@@ -295,7 +297,7 @@ install_gmusicbrowser () {
 	else
 		sudo apt-get update;
 	fi
-	update_progress count total_steps Gmusicbrowser;			# Update progress
+	update_progress count total_steps Gmusicbrowser;		# Update progress
 
 	# Install the program
 	# If detailed output is desired, execute accordingly
@@ -305,7 +307,7 @@ install_gmusicbrowser () {
 		sudo apt-get install gmusicbrowser;
 	fi
 
-	update_progress count total_steps Gmusicbrowser;			# Update progress
+	update_progress count total_steps Gmusicbrowser;		# Update progress
 }
 
 install_grubcustomizer () {
@@ -314,7 +316,7 @@ install_grubcustomizer () {
 
 	# Initial feedback
 	log_initial_feedback "Installation of Grub Customizer started!";
-	update_progress count total_steps GrubCustomizer;			# Update progress
+	update_progress count total_steps GrubCustomizer;		# Update progress
 
 	# Add required PPA repository
 	# If detailed output is desired, execute accordingly
@@ -324,7 +326,7 @@ install_grubcustomizer () {
 	else
 		sudo add-apt-repository ppa:danielrichter2007/grub-customizer;
 	fi
-	update_progress count total_steps GrubCustomizer;			# Update progress
+	update_progress count total_steps GrubCustomizer;		# Update progress
 
 	# Update repository
 	# If detailed output is desired, execute accordingly
@@ -333,7 +335,7 @@ install_grubcustomizer () {
 	else
 		sudo apt-get update;
 	fi
-	update_progress count total_steps GrubCustomizer;			# Update progress
+	update_progress count total_steps GrubCustomizer;		# Update progress
 
 	# Install the program
 	# If detailed output is desired, execute accordingly
@@ -343,8 +345,9 @@ install_grubcustomizer () {
 		sudo apt-get install grub-customizer;
 	fi
 
-	update_progress count total_steps GrubCustomizer;			# Update progress
+	update_progress count total_steps GrubCustomizer;		# Update progress
 }
+
 
 # Install apss that start with 'K'
 install_kid3 () {
@@ -467,6 +470,57 @@ install_pidgin () {
 
 
 # Install apss that start with 'S'
+install_spotify () {
+	count=-1;
+	total_steps=4;
+
+	# Initial feedback
+	log_initial_feedback "Installation of Spotify started!";
+	update_progress count total_steps Spotify;              # Update progress
+
+	# Add the Spotify repository signing key to be able to verify packages
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 \
+			--recv-keys BBEBDCB318AD50EC6865090613B00F1FD2C19886 >> \
+			log/log.txt 2>&1;
+	else
+		sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 \
+			--recv-keys BBEBDCB318AD50EC6865090613B00F1FD2C19886;
+	fi
+	update_progress count total_steps Spotify;              # Update progress
+
+	# Add required PPA repository
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		echo deb http://repository.spotify.com stable non-free | sudo tee \
+			/etc/apt/sources.list.d/spotify.list >> log/log.txt 2>&1;
+	else
+		echo deb http://repository.spotify.com stable non-free | sudo tee \
+			/etc/apt/sources.list.d/spotify.list;
+	fi
+	update_progress count total_steps Spotify;              # Update progress
+
+	# Update repository
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get update >> log/log.txt 2>&1;
+	else
+		sudo apt-get update;
+	fi
+	update_progress count total_steps Spotify;              # Update progress
+
+	# Install the program
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get install -y spotify-client >> log/log.txt 2>&1;
+	else
+		sudo apt-get install spotify-client;
+	fi
+
+	update_progress count total_steps Spotify;              # Update progress
+}
+
 install_sublime () {
 	count=-1;
 	total_steps=3;
@@ -504,6 +558,7 @@ install_sublime () {
 
 	update_progress count total_steps Sublime;              # Update progress
 }
+
 
 # Install apss that start with 'T'
 install_terminator () {
@@ -606,6 +661,7 @@ install_all () {
 		install_pidgin $silent_install;
 
 		# S
+		install_spotify $silent_install;
 		install_sublime $silent_install;
 
 		# T
@@ -638,6 +694,7 @@ install_all () {
 		install_pidgin;
 
 		# S
+		install_spotify;
 		install_sublime;
 
 		# T
@@ -700,7 +757,8 @@ install_menu () {
 		(1) Pidgin
 
 		S___
-		(1) Sublime Text 2
+		(1) Spotify
+		(2) Sublime Text 2
 
 		T___
 		(1) Terminator
@@ -761,8 +819,10 @@ IMEOF
 
 
 			# S___
-			"s1"|"S1")		install_sublime $silent_install	;;
-			"s1v"|"S1v")	install_sublime									;;
+			"s1"|"S1")		install_spotify $silent_install	;;
+			"s1v"|"S1v")	install_spotify									;;
+			"s2"|"S2")		install_sublime $silent_install	;;
+			"s2v"|"S2v")	install_sublime									;;
 
 
 			# T___
