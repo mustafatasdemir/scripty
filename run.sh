@@ -308,6 +308,44 @@ install_gmusicbrowser () {
 	update_progress count total_steps Gmusicbrowser;			# Update progress
 }
 
+install_grubcustomizer () {
+	count=-1;
+	total_steps=3;
+
+	# Initial feedback
+	log_initial_feedback "Installation of Grub Customizer started!";
+	update_progress count total_steps GrubCustomizer;			# Update progress
+
+	# Add required PPA repository
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo add-apt-repository -y \
+			ppa:danielrichter2007/grub-customizer >> log/log.txt 2>&1;
+	else
+		sudo add-apt-repository ppa:danielrichter2007/grub-customizer;
+	fi
+	update_progress count total_steps GrubCustomizer;			# Update progress
+
+	# Update repository
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get update >> log/log.txt 2>&1;
+	else
+		sudo apt-get update;
+	fi
+	update_progress count total_steps GrubCustomizer;			# Update progress
+
+	# Install the program
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get install -y grub-customizer >> log/log.txt 2>&1;
+	else
+		sudo apt-get install grub-customizer;
+	fi
+
+	update_progress count total_steps GrubCustomizer;			# Update progress
+}
+
 # Install apss that start with 'K'
 install_kid3 () {
 	count=-1;
@@ -556,6 +594,7 @@ install_all () {
 		# G
 		install_gimp $silent_install;
 		install_gmusicbrowser $silent_install;
+		install_grubcustomizer $silent_install;
 
 		# K
 		install_kid3 $silent_install;
@@ -587,6 +626,7 @@ install_all () {
 		# G
 		install_gimp;
 		install_gmusicbrowser;
+		install_grubcustomizer;
 
 		# K
 		install_kid3;
@@ -647,7 +687,8 @@ install_menu () {
 
 		G___
 		(1) Gimp
-		(1) Gmusicbrowser
+		(2) Gmusicbrowser
+		(3) Grub Customizer
 
 		K___
 		(1) Kid3
@@ -700,6 +741,8 @@ IMEOF
 			"g1v"|"G1v")	install_gimp									;;
 			"g2"|"G2")		install_gmusicbrowser $silent_install			;;
 			"g2v"|"G2v")	install_gmusicbrowser							;;
+			"g3"|"G3")		install_grubcustomizer $silent_install			;;
+			"g3v"|"G3v")	install_grubcustomizer							;;
 
 
 			# K___
