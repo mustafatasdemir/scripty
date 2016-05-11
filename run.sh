@@ -468,6 +468,34 @@ install_pidgin () {
 	update_progress count total_steps Pidgin;			# Update progress
 }
 
+install_pip () {
+	count=-1;
+	total_steps=2;
+
+	# Initial feedback
+	log_initial_feedback "Installation of pip started!";
+	update_progress count total_steps pip;			# Update progress
+
+	# Update repository
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get update >> log/log.txt 2>&1;
+	else
+		sudo apt-get update;
+	fi
+	update_progress count total_steps pip;			# Update progress
+
+	# Install the program
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get install -y python-pip >> log/log.txt 2>&1;
+	else
+		sudo apt-get install python-pip;
+	fi
+
+	update_progress count total_steps pip;			# Update progress
+}
+
 
 # Install apss that start with 'S'
 install_spotify () {
@@ -659,6 +687,7 @@ install_all () {
 
 		# P
 		install_pidgin $silent_install;
+		install_pip $silent_install;
 
 		# S
 		install_spotify $silent_install;
@@ -692,6 +721,7 @@ install_all () {
 
 		# P
 		install_pidgin;
+		install_pip;
 
 		# S
 		install_spotify;
@@ -750,11 +780,12 @@ install_menu () {
 		K___
 		(1) Kid3
 
-		K___
+		M___
 		(1) Mediaelch
 
 		P___
 		(1) Pidgin
+		(2) Pip
 
 		S___
 		(1) Spotify
@@ -816,6 +847,8 @@ IMEOF
 			# P___
 			"p1"|"P1")		install_pidgin $silent_install					;;
 			"p1v"|"P1v")	install_pidgin									;;
+			"p2"|"P2")		install_pip	$silent_install						;;
+			"p2v"|"P2v")	install_pip										;;
 
 
 			# S___
