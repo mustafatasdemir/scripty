@@ -536,6 +536,44 @@ install_pip () {
 	update_progress count total_steps pip;			# Update progress
 }
 
+install_pycharm () {
+	count=-1;
+	total_steps=3;
+
+	# Initial feedback
+	log_initial_feedback "Installation of PyCharm IDE started!";
+	update_progress count total_steps PyCharm;			# Update progress
+
+	# Add required PPA repository
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo add-apt-repository -y \
+			ppa:mystic-mirage/pycharm >> log/log.txt 2>&1;
+	else
+		sudo add-apt-repository ppa:mystic-mirage/pycharm;
+	fi
+	update_progress count total_steps PyCharm;			# Update progress
+
+	# Update repository
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get update >> log/log.txt 2>&1;
+	else
+		sudo apt-get update;
+	fi
+	update_progress count total_steps PyCharm;			# Update progress
+
+	# Install the program
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get install -y pycharm-community >> log/log.txt 2>&1;
+	else
+		sudo apt-get install pycharm-community;
+	fi
+
+	update_progress count total_steps PyCharm;			# Update progress
+}
+
 
 # Install apss that start with 'S'
 install_spotify () {
@@ -770,6 +808,7 @@ install_all () {
 		# P
 		install_pidgin $silent_install;
 		install_pip $silent_install;
+		install_pycharm $silent_install;
 
 		# S
 		install_spotify $silent_install;
@@ -808,6 +847,7 @@ install_all () {
 		# P
 		install_pidgin;
 		install_pip;
+		install_pycharm;
 
 		# S
 		install_spotify;
@@ -876,6 +916,7 @@ install_menu () {
 		P___
 		(1) Pidgin
 		(2) Pip
+		(3) PyCharm IDE
 
 		S___
 		(1) Spotify
@@ -945,6 +986,8 @@ IMEOF
 			"p1v"|"P1v")	install_pidgin									;;
 			"p2"|"P2")		install_pip	$silent_install						;;
 			"p2v"|"P2v")	install_pip										;;
+			"p3"|"P3")		install_pycharm	$silent_install						;;
+			"p3v"|"P3v")	install_pycharm										;;
 
 
 			# S___
