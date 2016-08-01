@@ -203,6 +203,46 @@ install_clementine () {
 }
 
 
+# Install apss that start with 'C'
+install_dolphin_emu () {
+	count=-1;
+	total_steps=3;
+
+	# Initial feedback
+	log_initial_feedback "Installation of Dolphin Emulator started!";
+	update_progress count total_steps Dolphin;			# Update progress
+
+	# Add required PPA repository
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo add-apt-repository -y \
+			ppa:dolphin-emu/ppa >> log/log.txt 2>&1;
+	else
+		sudo add-apt-repository ppa:dolphin-emu/ppa;
+	fi
+	update_progress count total_steps Dolphin;			# Update progress
+
+	# Update repository
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get update >> log/log.txt 2>&1;
+	else
+		sudo apt-get update;
+	fi
+	update_progress count total_steps Dolphin;			# Update progress
+
+	# Install the program
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get install -y dolphin-emu >> log/log.txt 2>&1;
+	else
+		sudo apt-get install dolphin-emu;
+	fi
+
+	update_progress count total_steps Dolphin;			# Update progress
+}
+
+
 # Install apss that start with 'F'
 install_firefox () {
 	count=-1;
@@ -671,6 +711,9 @@ install_all () {
 		# C
 		install_clementine $silent_install;
 
+		# D
+		install_dolphin_emu $silent_install;
+
 		# F
 		install_firefox $silent_install;
 
@@ -704,6 +747,9 @@ install_all () {
 
 		# C
 		install_clementine;
+
+		# D
+		install_dolphin_emu;
 
 		# F
 		install_firefox;
@@ -769,6 +815,9 @@ install_menu () {
 		C___
 		(1) Clementine
 
+		D___
+		(1) Dolphin Emulator
+
 		F___
 		(1) Firefox
 
@@ -818,6 +867,11 @@ IMEOF
 			# C___
 			"c1"|"C1")		install_clementine $silent_install				;;
 			"c1v"|"C1v")	install_clementine								;;
+
+
+			# D___
+			"d1"|"D1")		install_dolphin_emu $silent_install				;;
+			"d1v"|"D1v")	install_dolphin_emu								;;
 
 
 			# F___
@@ -925,7 +979,7 @@ set_terminal_welcome_message () {
 		------------------------------
 
 		You are about to set a welcome message for your system terminal.
-		Please, make sure that you have a file named as 
+		Please, make sure that you have a file named as
 		'bash_welcome_message' under user's home directory
 		for this script to work effectively!
 
