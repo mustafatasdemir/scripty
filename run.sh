@@ -576,6 +576,44 @@ install_pycharm () {
 
 
 # Install apss that start with 'S'
+install_slowmovideo () {
+	count=-1;
+	total_steps=3;
+
+	# Initial feedback
+	log_initial_feedback "Installation of SlowmoVideo started!";
+	update_progress count total_steps SlowmoVideo;              # Update progress
+
+	# Add required PPA repository
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo add-apt-repository -y \
+			ppa:ubuntuhandbook1/slowmovideo >> log/log.txt 2>&1;
+	else
+		sudo add-apt-repository ppa:ubuntuhandbook1/slowmovideo;
+	fi
+	update_progress count total_steps SlowmoVideo;              # Update progress
+
+	# Update repository
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get update >> log/log.txt 2>&1;
+	else
+		sudo apt-get update;
+	fi
+	update_progress count total_steps SlowmoVideo;              # Update progress
+
+	# Install the program
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get install -y slowmovideo >> log/log.txt 2>&1;
+	else
+		sudo apt-get install slowmovideo;
+	fi
+
+	update_progress count total_steps SlowmoVideo;              # Update progress
+}
+
 install_spotify () {
 	count=-1;
 	total_steps=4;
@@ -811,6 +849,7 @@ install_all () {
 		install_pycharm $silent_install;
 
 		# S
+		install_slowmovideo $silent_install;
 		install_spotify $silent_install;
 		install_sublime $silent_install;
 
@@ -850,6 +889,7 @@ install_all () {
 		install_pycharm;
 
 		# S
+		install_slowmovideo;
 		install_spotify;
 		install_sublime;
 
@@ -919,8 +959,9 @@ install_menu () {
 		(3) PyCharm IDE
 
 		S___
-		(1) Spotify
-		(2) Sublime Text 2
+		(1) SlowmoVideo
+		(2) Spotify
+		(3) Sublime Text 2
 
 		T___
 		(1) Terminator
@@ -991,10 +1032,12 @@ IMEOF
 
 
 			# S___
-			"s1"|"S1")		install_spotify $silent_install	;;
-			"s1v"|"S1v")	install_spotify									;;
-			"s2"|"S2")		install_sublime $silent_install	;;
-			"s2v"|"S2v")	install_sublime									;;
+			"s1"|"S1")		install_slowmovideo $silent_install	;;
+			"s1v"|"S1v")	install_slowmovideo									;;
+			"s2"|"S2")		install_spotify $silent_install	;;
+			"s2v"|"S2v")	install_spotify									;;
+			"s3"|"S3")		install_sublime $silent_install	;;
+			"s3v"|"S3v")	install_sublime									;;
 
 
 			# T___
