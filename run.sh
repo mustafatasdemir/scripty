@@ -698,6 +698,45 @@ install_vim () {
 }
 
 
+install_vlc () {
+	count=-1;
+	total_steps=3;
+
+	# Initial feedback
+	log_initial_feedback "Installation of VLC started!";
+	update_progress count total_steps VLC;			# Update progress
+
+	# Add required PPA repository
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo add-apt-repository -y \
+			ppa:nicola-onorata/desktop >> log/log.txt 2>&1;
+	else
+		sudo add-apt-repository ppa:nicola-onorata/desktop;
+	fi
+	update_progress count total_steps VLC;			# Update progress
+
+	# Update repository
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get update >> log/log.txt 2>&1;
+	else
+		sudo apt-get update;
+	fi
+	update_progress count total_steps VLC;			# Update progress
+
+	# Install the program
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get install -y vlc >> log/log.txt 2>&1;
+	else
+		sudo apt-get install vlc;
+	fi
+
+	update_progress count total_steps VLC;			# Update progress
+}
+
+
 # Install all programs
 install_all () {
 
@@ -741,6 +780,7 @@ install_all () {
 
 		# V
 		install_vim $silent_install;
+		install_vlc $silent_install;
 	else
 		# A
 		install_arronax;
@@ -778,6 +818,7 @@ install_all () {
 
 		# V
 		install_vim;
+		install_vlc;
 	fi
 }
 
@@ -845,6 +886,7 @@ install_menu () {
 
 		V___
 		(1) Vim
+		(2) VLC
 
 		__________________________
 		INSTALL ALL PROGRAMS (a/A)
@@ -920,6 +962,8 @@ IMEOF
 			# V___
 			"v1"|"V1")		install_vim $silent_install						;;
 			"v1v"|"V1v")	install_vim										;;
+			"v2"|"V2")		install_vlc $silent_install										;;
+			"v2v"|"V2v")	install_vlc										;;
 
 			# Others
 			"B"|"b")		back_flag=1 && return							;;
