@@ -813,6 +813,35 @@ install_vlc () {
 }
 
 
+install_vokoscreen () {
+	count=-1;
+	total_steps=2;
+
+	# Initial feedback
+	log_initial_feedback "Installation of VokoScreen started!";
+	update_progress count total_steps VokoScreen;			# Update progress
+
+	# Update repository
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get update >> log/log.txt 2>&1;
+	else
+		sudo apt-get update;
+	fi
+	update_progress count total_steps VokoScreen;			# Update progress
+
+	# Install the program
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get install -y vokoscreen >> log/log.txt 2>&1;
+	else
+		sudo apt-get install vokoscreen;
+	fi
+
+	update_progress count total_steps VokoScreen;			# Update progress
+}
+
+
 # Install all programs
 install_all () {
 
@@ -859,6 +888,7 @@ install_all () {
 		# V
 		install_vim $silent_install;
 		install_vlc $silent_install;
+		install_vokoscreen $silent_install;
 	else
 		# A
 		install_arronax;
@@ -899,6 +929,7 @@ install_all () {
 		# V
 		install_vim;
 		install_vlc;
+		install_vokoscreen;
 	fi
 }
 
@@ -969,6 +1000,7 @@ install_menu () {
 		V___
 		(1) Vim
 		(2) VLC
+		(3) VokoScreen
 
 		__________________________
 		INSTALL ALL PROGRAMS (a/A)
@@ -1050,6 +1082,9 @@ IMEOF
 			"v1v"|"V1v")	install_vim										;;
 			"v2"|"V2")		install_vlc $silent_install										;;
 			"v2v"|"V2v")	install_vlc										;;
+			"v3"|"V3")		install_vokoscreen $silent_install										;;
+			"v3v"|"V3v")	install_vokoscreen										;;
+
 
 			# Others
 			"B"|"b")		back_flag=1 && return							;;
