@@ -744,6 +744,46 @@ install_terminator () {
 }
 
 
+# Install apss that start with 'U'
+install_uget () {
+	count=-1;
+	total_steps=3;
+
+	# Initial feedback
+	log_initial_feedback "Installation of UGet started!";
+	update_progress count total_steps UGet;			# Update progress
+
+	# Add required PPA repository
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo add-apt-repository -y \
+			ppa:plushuang-tw/uget-stable >> log/log.txt 2>&1;
+	else
+		sudo add-apt-repository ppa:plushuang-tw/uget-stable;
+	fi
+	update_progress count total_steps UGet;			# Update progress
+
+	# Update repository
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get update >> log/log.txt 2>&1;
+	else
+		sudo apt-get update;
+	fi
+	update_progress count total_steps UGet;			# Update progress
+
+	# Install the program
+	# If detailed output is desired, execute accordingly
+	if [ "$1" = $silent_install ]; then
+		sudo apt-get install -y uget >> log/log.txt 2>&1;
+	else
+		sudo apt-get install uget;
+	fi
+
+	update_progress count total_steps UGet;			# Update progress
+}
+
+
 # Install apss that start with 'V'
 install_vim () {
 	count=-1;
@@ -885,6 +925,9 @@ install_all () {
 		# T
 		install_terminator $silent_install;
 
+		# U
+		install_uget $silent_install;
+
 		# V
 		install_vim $silent_install;
 		install_vlc $silent_install;
@@ -925,6 +968,9 @@ install_all () {
 
 		# T
 		install_terminator;
+
+		# U
+		install_uget;
 
 		# V
 		install_vim;
@@ -996,6 +1042,9 @@ install_menu () {
 
 		T___
 		(1) Terminator
+
+		U___
+		(1) UGet
 
 		V___
 		(1) Vim
@@ -1075,6 +1124,11 @@ IMEOF
 			# T___
 			"t1"|"T1")		install_terminator $silent_install				;;
 			"t1v"|"T1v")	install_terminator								;;
+
+
+			# U___
+			"u1"|"U1")		install_uget $silent_install				;;
+			"u1v"|"U1v")	install_uget								;;
 
 
 			# V___
